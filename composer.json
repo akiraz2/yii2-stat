@@ -1,0 +1,36 @@
+{
+  "name": "akiraz2/yii2-stat",
+  "description": "Multi Statistic and Analytic Yii2 Module for your website. Yandex, Google, Liveinternet, Mail, Bigmir, Alexa, Hotlog, Rambler, Openstat and Own stat by IP",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii2",
+    "statistics",
+    "ip",
+    "module",
+    "yandex-metrika",
+    "google-analytic",
+    "openstat",
+    "bigmir"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "akiraz",
+      "email": "akiraz@bk.ru",
+      "homepage": "https://github.com/akiraz2/yii2-stat",
+      "role": "Developer"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "yiisoft/yii2": "~2.0.15"
+  },
+  "extra": {
+    "bootstrap": "akiraz2\\stat\\Bootstrap"
+  },
+  "autoload": {
+    "psr-4": {
+      "akiraz2\\stat\\": "src"
+    }
+  }
+}
