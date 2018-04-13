@@ -1,9 +1,10 @@
 <?php
 /**
- * Project: yii2-stat
- * Author: akiraz2
- * License: MIT
- * Copyright (c) 2018.
+ * @project: yii2-stat
+ * @description Multi web stat and analytics module
+ * @author: akiraz2
+ * @license: MIT
+ * @copyright (c) 2018.
  */
 
 use yii\helpers\Html;

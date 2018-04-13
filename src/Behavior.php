@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: user4957
- * Date: 13.04.2018
- * Time: 12:54
+ * @project: yii2-stat
+ * @description Multi web stat and analytics module
+ * @author: akiraz2
+ * @license: MIT
+ * @copyright (c) 2018.
  */
 
 namespace akiraz2\stat;
@@ -28,7 +29,10 @@ class Behavior extends \yii\base\Behavior
     public function onEndBody($event)
     {
         if($this->getModule()->yandexMetrika!= false) {
-            echo $this->getBuilder()->render();
+            echo $this->getBuilder()->render('yandexMetrika');
+        }
+        if($this->getModule()->googleAnalytics!= false) {
+            echo $this->getBuilder()->render('googleAnalytics');
         }
     }
 

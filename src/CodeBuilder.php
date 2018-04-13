@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: user4957
- * Date: 13.04.2018
- * Time: 12:59
+ * @project: yii2-stat
+ * @description Multi web stat and analytics module
+ * @author: akiraz2
+ * @license: MIT
+ * @copyright (c) 2018.
  */
 
 namespace akiraz2\stat;
@@ -11,6 +12,7 @@ namespace akiraz2\stat;
 use akiraz2\stat\traits\ModuleTrait;
 use Yii;
 use yii\base\BaseObject;
+use yii\helpers\Inflector;
 
 class CodeBuilder extends BaseObject
 {
@@ -20,9 +22,10 @@ class CodeBuilder extends BaseObject
 
     public $params = [];
 
-    public function render()
+    public function render($counter_name)
     {
-        return $this->getView()->render('@akiraz2/stat/views/code-yandex.php', $this->prepareData());
+        $view_name = Inflector::camel2id($counter_name);
+        return $this->getView()->render("@akiraz2/stat/views/code-$view_name.php", $this->prepareData($counter_name));
     }
 
     public function getView()
@@ -30,20 +33,23 @@ class CodeBuilder extends BaseObject
         return Yii::$app->getView();
     }
 
-    public function prepareData()
+    public function prepareData($counter_name)
     {
+        $module_property = $this->getModule()->__get($counter_name);
+
         return [
-            'id' => $this->getModule()->yandexMetrika['id'],
-            'params' => $this->prepareParams(),
+            'id' => $module_property['id'],
+            'params' => isset($module_property['params'])?$this->prepareParams($module_property): [],
         ];
     }
 
-    public function prepareParams()
+    public function prepareParams($module_property)
     {
         return array_filter(array_merge(
-            $this->getModule()->yandexMetrika['params'],
             [
-                'id' => $this->getModule()->yandexMetrika['id'],
-            ]));
+                'id' => $module_property['id'],
+            ],
+            $module_property['params']
+        ));
     }
 }
