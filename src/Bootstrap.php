@@ -29,10 +29,10 @@ class Bootstrap implements BootstrapInterface{
     {
 
         //Правила маршрутизации
-        $app->getUrlManager()->addRules([
+        /*$app->getUrlManager()->addRules([
             'statistics' => 'statistics/stat/index',
             'statistics/forms' => 'statistics/stat/forms',
-        ], false);
+        ], false);*/
 
         /*
          * Регистрация модуля в приложении
@@ -41,8 +41,10 @@ class Bootstrap implements BootstrapInterface{
          *      'statistics' => 'akiraz2\stat\Module'
          *  ],
          */
-         $app->setModule('statistics', 'akiraz2\stat\Module');
+         //$app->setModule('stat', 'akiraz2\stat\Module');
 
-
+         $app->get('view')->attachBehavior('StatBehavior',[
+             'class' => Behavior::class,
+         ]);
     }
 }

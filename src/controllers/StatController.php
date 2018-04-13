@@ -34,14 +34,6 @@ class StatController extends Controller
      */
     public function actionIndex($condition = [], $stat_ip = false)
     {
-        //регистрация ресурсов:
-        \akiraz2\stat\StatAssetsBundle::register($this->view);
-
-        //проверка доступа к странице
-        $this->checkAccess();
-
-        $checkPassword = $this->checkPassword(); //проверка правильности ввода пароля
-        if(!$checkPassword) return $this->render('enter'); //на страницу входа
 
         $count_model = new KslStatistic();
         //Получение списка статистики
@@ -62,55 +54,6 @@ class StatController extends Controller
             'black_list' => $black_list,
         ]);
     }
-
-
-    /**
-     * Проверка доступа пользователя к просмотру страницы статистики
-     * перенаправление на страницу входа если не авторизован
-     *
-     * @return \yii\web\Response
-     */
-    public function checkAccess()
-    {
-        //Если доступ разрешен только аутентифицированным пользователям
-        $auth_config = KslStatistic::getParameters()['authentication'];
-        $user = Yii::$app->user->getId(); //авторизованный пользователь
-
-        if ($auth_config && !$user) {
-            $auth_route = KslStatistic::getParameters()['auth_route'];
-
-            //перенаправляем на страницу авторизации указанную в настройках
-            if($auth_route){
-                $this->redirect(Yii::$app->urlManager->createUrl([$auth_route]))->send();
-            }
-            else {
-                Yii::$app->user->loginRequired()->send(); //на стандартную страницу авторизации
-            }
-        }
-    }
-
-
-    /**
-     * Проверка пароля сохраненного в сессии для доступа к странице статистики
-     *
-     * @return string
-     */
-    public function checkPassword()
-    {
-        $session = Yii::$app->session;
-        $password_config = KslStatistic::getParameters()['password'];
-
-        if ($password_config) {
-
-            $session_stat = $session->get('ksl-statistics');
-
-            if (!$session_stat || ($session_stat !== $password_config)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 
     /**
      * Обработка форм - форма входа и формы со страницы статистики

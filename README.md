@@ -1,5 +1,6 @@
-# Yii2 Multi Statistic Module [![Packagist Version](https://img.shields.io/packagist/v/akiraz2/yii2-stat.svg?style=flat-square)](https://packagist.org/packages/akiraz2/yii2-stat) [![Total Downloads](https://img.shields.io/packagist/dt/akiraz2/yii2-stat.svg?style=flat-square)](https://packagist.org/packages/akiraz2/yii2-stat) [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+# Yii2 Multi Web Statistic Module [![Packagist Version](https://img.shields.io/packagist/v/akiraz2/yii2-stat.svg?style=flat-square)](https://packagist.org/packages/akiraz2/yii2-stat) [![Total Downloads](https://img.shields.io/packagist/dt/akiraz2/yii2-stat.svg?style=flat-square)](https://packagist.org/packages/akiraz2/yii2-stat) [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
+> **NOTE:** Module is in initial development. Anything may change at any time.
 
 Модуль статистики и аналитики для вашего сайта. Много систем на ваш выбор, подключаются либо в конфиге модуля либо в админке:
 
@@ -14,23 +15,31 @@
 * Openstat
 * и даже на выбор **собственная** система для отслеживания посетителей по их IP-адресам.
 
-> **NOTE:** Module is in initial development. Anything may change at any time.
+Для разработки модуля Yii2 Stat были использованы наработки данных модулей:
+* [klisl/yii2-statistics](https://github.com/klisl/yii2-statistics) (inspired)
+* [hiqdev/yii2-yandex-metrika](https://github.com/hiqdev/yii2-yandex-metrika) (code)
+
+Иногда не все посещения сайта фиксируются счетчиками Яндекса или Google. 
+Чтобы посещение точно было засчитано (а это очень важно для отслеживания рекламных источников), 
+используют серверные логи или в нашем случае можно использовать минимально рабочий счетчик.
+
 
 ## Features
 
 * вы можете использовать внешние сервисы на свой вкус и выбор простым конфигурированием модуля
-* есть собственная простая система сбора статистики, данные хранятся в отдельной таблице базы данных
-* статистика формируется на основе уникальных IP адресов посетителей сайта/приложения
-* можно посмотреть страну, город, какой браузер и расширение
+* есть собственная простая система сбора статистики, 
+* данные хранятся в отдельной таблице базы данных или на ваше усмотрение (*Redis*, etc)
+* статистика формируется на основе уникальных IP адресов посетителей сайта/приложения и Cookie
+* можно посмотреть страну, **город**, какой браузер и расширение, **referer**
 * **отсеивание поисковых ботов**
 * есть возможность добавления IP, которые не нужны в статистике в черный спискок.
 * удобная фильтрация вывода результатов статистики (за день, период, по определенному IP).
 
 
 Какая информация выводится по каждому отдельному посетителю:
-*	Его уникальный IP адрес с возможностью получения информации о его местонахождении.
-*	URL просматриваемой страницы и количество переходов.
-*	Время посещения определенной страницы.
+* Его уникальный IP адрес с возможностью получения информации о его местонахождении.
+* URL просматриваемой страницы и количество переходов.
+* Время посещения определенной страницы.
 
 
   
@@ -62,59 +71,30 @@ Migration run
 yii migrate --migrationPath=@akiraz2/stat/migrations
 ```
 
-### Config
-
-todo: поменять эти настройки на модульные
+### Config common modules in common/config/main.php
 
 ```php
-<?php
-return [
-
-    'statistics' => [
-
-        'days_default' => 3, //кол-во дней для вывода статистики по-умолчанию (сегодня/вчера/...)
-
-        'password' => 'klisl', //пароль для входа на страницу статистики. Если false (без кавычек) - вход без пароля
-
-        'authentication' => false, //если true, то статистика доступна только аутентифицированным пользователям
-
-        'auth_route' => 'site/login', //контроллер/действие для страницы аутентификации (по-умолчанию 'site/login')
-
-        'date_old' => 90 //удалять данные через х дней
-    ]
-];    
+    'modules' => [
+        'stat' => [
+            'class' => akiraz2\stat\Module::class,
+            'yandexMetrika' => [
+               'id' => 13780453,
+               'params' => [
+                   'clickmap' => true,
+                   'trackLinks' => true,
+                   'accurateTrackBounce' => true,
+                   'webvisor' => true
+               ]
+            ],
+        ],
+     ],    
 ```
-для этого вставить массив 'statistics' с нужными вложенными элементами.
-Для включения опции "authentication" должна быть реализована аутентификация пользователей.
 
-
+TODO:
+для backend добавить настройки AccessControl
 
 ## Usage
 // переработать
-
-Разместить (переопределить метод behaviors) в контроллерах ответственных за вывод страниц по которым нужно собирать статистику:
-```php
-public function behaviors()
-{
-    return [
-
-        'statistics' => [
-            'class' => \Klisl\Statistics\AddStatistics::class,
-            'actions' => ['index', 'contact'],
-        ],
-…
-
-```
-где в качестве значений массива с ключем 'actions' указать нужные действия контроллера.
-
-В качестве альтернативы можно (не переопределяя метод behaviors) указать в каждом необходимом действии такой код:
-```php
-$this->attachBehavior('statistics', [
-    'class' => \Klisl\Statistics\AddStatistics::class,
-    'actions' => [$this->action->id]
-]);
-
-```
 
 
 Для перехода на страницу статистики
@@ -123,12 +103,7 @@ $this->attachBehavior('statistics', [
 - без ЧПУ:
 **http://your-site.com/web/index.php?r=statistics/stat/index**
 
-Откроется форма для входа на страницу с вводом пароля или страница аутентификации (в зависимости от настроек).
-После ввода правильных данных, откроется сама страница статистики с формами для фильтрации.
-
-Пароль для входа, по-умолчанию: ***klisl***
-
-При тестировании на локальном компьютере, в статистику попадет IP 127.0.0.1. // добавить переменную YII_DEV
+При тестировании на локальном компьютере, в статистику попадет IP 127.0.0.1. // добавить переменную YII_DEV, чтобы локальный IP попадал
 
 После начала использования пакета на хостинге, необходимо будет добавить свой IP в черный список,
  чтобы он не выводился в статистике.
