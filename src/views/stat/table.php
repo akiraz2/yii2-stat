@@ -1,4 +1,10 @@
 <?php
+/**
+ * Project: yii2-stat
+ * Author: akiraz2
+ * License: MIT
+ * Copyright (c) 2018.
+ */
 
 $now_date = ''; //текущая дата которая выводится в таблице
 $show_new_date = false; //показать смену даты в таблице

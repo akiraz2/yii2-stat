@@ -1,5 +1,12 @@
 <?php
-    use yii\helpers\Html;
+/**
+ * Project: yii2-stat
+ * Author: akiraz2
+ * License: MIT
+ * Copyright (c) 2018.
+ */
+
+use yii\helpers\Html;
     use akiraz2\stat\AlertWidget;
 ?>
 
