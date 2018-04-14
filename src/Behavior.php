@@ -28,6 +28,11 @@ class Behavior extends \yii\base\Behavior
 
     public function onEndBody($event)
     {
+        // зачем нам счетчики в дев режиме- отключаем
+        if (YII_DEBUG || YII_ENV=='dev') {
+            return false;
+        }
+
         if($this->getModule()->yandexMetrika!= false) {
             echo $this->getBuilder()->render('yandexMetrika');
         }
