@@ -1,7 +1,7 @@
 # Yii2 Multi Web Statistic Module [![Packagist Version](https://img.shields.io/packagist/v/akiraz2/yii2-stat.svg?style=flat-square)](https://packagist.org/packages/akiraz2/yii2-stat) [![Total Downloads](https://img.shields.io/packagist/dt/akiraz2/yii2-stat.svg?style=flat-square)](https://packagist.org/packages/akiraz2/yii2-stat) [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
 > **NOTE:** Module is in initial development. Anything may change at any time. 
-На данный момент текущая рабочая версия v0.1.1 - есть только счетчики яндекса и google
+На данный момент текущая рабочая версия v0.2 - есть только счетчики яндекса и google и собственный счетчик в DB
 
 Модуль статистики и аналитики для вашего сайта. Много систем на ваш выбор, подключаются либо в конфиге модуля либо в админке:
 
@@ -14,7 +14,7 @@
 * Hotlog
 * Rambler
 * Openstat
-* и даже на выбор **собственная** система для отслеживания посетителей по их IP-адресам и кукам.
+* и даже на выбор **собственная** система для отслеживания посетителей по их IP-адресам и cookie.
 
 > **NOTE:** Используются самые свежие версии кода счетчика (yandex-metrika2, gtag.js).
 
@@ -35,7 +35,8 @@
 * данные хранятся в отдельной таблице базы данных или на ваше усмотрение (*Redis*, etc)
 * статистика формируется на основе уникальных IP адресов посетителей сайта/приложения и Cookie
 * можно посмотреть страну, **город**, какой браузер и расширение, **referer**
-* **отсеивание поисковых ботов**
+* **источник перехода** (inner, search, direct, ads (from UTM-tags), unknown)
+* **отсеивание поисковых ботов** (11шт)
 * есть возможность добавления IP, которые не нужны в статистике в черный спискок
 * удобная фильтрация вывода результатов статистики (за день, период, по определенному IP)
 
@@ -66,7 +67,6 @@ or add
 to the require section of your `composer.json` file.
 
 
-
 ### Migration
 
 Migration run
@@ -75,7 +75,9 @@ Migration run
 yii migrate --migrationPath=@akiraz2/stat/migrations
 ```
 
-### Config common modules in common/config/main.php
+### Config 
+
+Config common modules in common/config/main.php
 
 ```php
     'modules' => [
@@ -92,7 +94,13 @@ yii migrate --migrationPath=@akiraz2/stat/migrations
             ],
             'googleAnalytics' => [
                 'id' => 'UA-114443409-2',
-            ]
+            ],
+            'ownStat' => true, //false by default
+            'ownStatCookieId' => 'yii2_counter_id', // its default
+            'onlyGuestUsers' => true, // its default
+            'countBot' => false, // its default
+            'appId' => ['app-frontend'], // by default count visits only from Frontend (not for backend)
+            'blackIpList' => [] // ['127.0.0.1'] by default
         ],
      ],    
 ```
@@ -116,10 +124,18 @@ TODO:
  чтобы он не выводился в статистике.
 
 
+## Development
+
+Please translate to your language! Edit config `@vendor/akiraz2/yii2-stat/src/messages/config.php`, add your language and run script:
+```php
+php ./yii message/extract @akiraz2/stat/messages/config.php
+```
+translate file will be in `@vendor/akiraz2/yii2-stat/src/messages/` or your configured path
+
 
 ## Support
 
-If you have any questions or problems with Yii2-Blog you can ask them directly
+If you have any questions or problems with Yii2-Stat you can ask them directly
  by using following email address: `akiraz@bk.ru`.
 
 
@@ -127,9 +143,10 @@ If you have any questions or problems with Yii2-Blog you can ask them directly
 
 If you'd like to contribute, please fork the repository and use a feature branch. Pull requests are warmly welcome.
 +PSR-2 style coding.
+
 I can apply patch, PR in 2-3 days! If not, please write me `akiraz@bk.ru`
 
 ## Licensing
 
-Yii2-Blog is released under the MIT License. See the bundled [LICENSE.md](LICENSE.md)
+Yii2-Stat is released under the MIT License. See the bundled [LICENSE.md](LICENSE.md)
 for details. 

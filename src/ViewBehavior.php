@@ -13,7 +13,7 @@ use akiraz2\stat\traits\ModuleTrait;
 use Yii;
 use yii\web\View;
 
-class Behavior extends \yii\base\Behavior
+class ViewBehavior extends \yii\base\Behavior
 {
     use ModuleTrait;
 
@@ -22,21 +22,21 @@ class Behavior extends \yii\base\Behavior
     public function events()
     {
         return [
-            View::EVENT_END_BODY => 'onEndBody',
+            View::EVENT_END_BODY => 'onEndBody'
         ];
     }
 
     public function onEndBody($event)
     {
         // зачем нам счетчики в дев режиме- отключаем
-        if (YII_DEBUG || YII_ENV=='dev') {
-            return false;
+        if (YII_DEBUG || YII_ENV == 'dev' || Yii::$app->request->isAjax) {
+            return;
         }
 
-        if($this->getModule()->yandexMetrika!= false) {
+        if ($this->getModule()->yandexMetrika != false) {
             echo $this->getBuilder()->render('yandexMetrika');
         }
-        if($this->getModule()->googleAnalytics!= false) {
+        if ($this->getModule()->googleAnalytics != false) {
             echo $this->getBuilder()->render('googleAnalytics');
         }
     }

@@ -11,6 +11,8 @@ namespace akiraz2\stat;
 
 
 use yii\base\BootstrapInterface;
+use yii\console\Application as ConsoleApplication;
+use yii\i18n\PhpMessageSource;
 
 
 /**
@@ -43,9 +45,25 @@ class Bootstrap implements BootstrapInterface{
          *  ],
          */
          //$app->setModule('stat', 'akiraz2\stat\Module');
+         if(! ($app instanceof ConsoleApplication)) {
+             $app->get('view')->attachBehavior('ViewBehavior',[
+                 'class' => ViewBehavior::class,
+             ]);
+             $app->attachBehavior('ControllerBehavior',[
+                 'class' => ControllerBehavior::class,
+             ]);
+         }
 
-         $app->get('view')->attachBehavior('StatBehavior',[
-             'class' => Behavior::class,
-         ]);
+        // Add module I18N category.
+        if (!isset($app->i18n->translations['akiraz2/stat'])) {
+            $app->i18n->translations['akiraz2/stat'] = [
+                'class' => PhpMessageSource::class,
+                'basePath' =>  __DIR__ .'/messages',
+                'forceTranslation' => true,
+                'fileMap' => [
+                    'akiraz2/stat' => 'stat.php',
+                ]
+            ];
+        }
     }
 }
