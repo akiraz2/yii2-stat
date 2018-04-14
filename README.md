@@ -83,7 +83,7 @@ Config common modules in common/config/main.php
     'modules' => [
         'stat' => [
             'class' => akiraz2\stat\Module::class,
-            'yandexMetrika' => [
+            'yandexMetrika' => [ // false by default
                'id' => 13788753,
                'params' => [
                    'clickmap' => true,
@@ -92,21 +92,37 @@ Config common modules in common/config/main.php
                    'webvisor' => true
                ]
             ],
-            'googleAnalytics' => [
+            'googleAnalytics' => [ // false by default
                 'id' => 'UA-114443409-2',
             ],
             'ownStat' => true, //false by default
-            'ownStatCookieId' => 'yii2_counter_id', // its default
-            'onlyGuestUsers' => true, // its default
-            'countBot' => false, // its default
-            'appId' => ['app-frontend'], // by default count visits only from Frontend (not for backend)
+            'ownStatCookieId' => 'yii2_counter_id', // 'yii2_counter_id' default
+            'onlyGuestUsers' => true, // true default
+            'countBot' => false, // false default
+            'appId' => ['app-frontend'], // by default count visits only from Frontend App (in backend app we dont need it)
             'blackIpList' => [] // ['127.0.0.1'] by default
+            
+            // размещаем нашу админ панель на backend с проверкой доступа или ролями (здесь используется dektrium/user)
+            'controllerMap' => [
+                'dashboard' => [
+                    'class' => 'akiraz2\stat\controllers\DashboardController',
+                    'as access' => [
+                        'class' => \yii\filters\AccessControl::class,
+                        'rules' => [
+                            [
+                                'allow' => true,
+                                'roles' => ['@'],
+                                'matchCallback' => function () {
+                                    return Yii::$app->user->identity->getIsAdmin();
+                                },
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ],
      ],    
 ```
-
-TODO:
-для backend добавить настройки AccessControl
 
 ## Usage
 // переработать
@@ -114,14 +130,9 @@ TODO:
 
 Для перехода на страницу статистики
  - с включенным ЧПУ в настройках Вашего приложения:
-**http://your-site.com/statistics**
+**http://your-site.com/stat/dashboard/index**
 - без ЧПУ:
-**http://your-site.com/web/index.php?r=statistics/stat/index**
-
-При тестировании на локальном компьютере, в статистику попадет IP 127.0.0.1. // добавить переменную YII_DEV, чтобы локальный IP попадал
-
-После начала использования пакета на хостинге, необходимо будет добавить свой IP в черный список,
- чтобы он не выводился в статистике.
+**http://your-site.com/web/index.php?r=stat/dashboard/index**
 
 
 ## Development

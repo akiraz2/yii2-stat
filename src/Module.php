@@ -15,7 +15,7 @@ use yii\base\Module as BaseModule;
 
 class Module extends BaseModule
 {
-    public $version = '0.1.1';
+    public $version = '0.2.2';
 
     /** @var string */
     public $controllerNamespace = 'akiraz2\stat\controllers';
