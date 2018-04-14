@@ -3,6 +3,7 @@
 namespace akiraz2\stat\models;
 
 use akiraz2\stat\Module;
+use akiraz2\stat\traits\ModuleTrait;
 use Yii;
 
 /**
@@ -20,11 +21,15 @@ use Yii;
  */
 class WebVisitor extends \yii\db\ActiveRecord
 {
+    use ModuleTrait;
+
     const TYPE_UNKNOWN = 0;
     const TYPE_INNER = 1;
     const TYPE_DIRECT = 2;
     const TYPE_SEARCH = 3;
     const TYPE_ADS = 4;
+
+    public $visits;
 
     /**
      * @inheritdoc
@@ -65,5 +70,24 @@ class WebVisitor extends \yii\db\ActiveRecord
             'user_agent' => Module::t('stat', 'User Agent'),
             'created_at' => Module::t('stat', 'Created At'),
         ];
+    }
+
+    public static function getSourceList() {
+        return [
+            self::TYPE_UNKNOWN => Module::t('stat', 'Unknown'),
+            self::TYPE_INNER => Module::t('stat', 'Inner'),
+            self::TYPE_DIRECT => Module::t('stat', 'Direct'),
+            self::TYPE_SEARCH => Module::t('stat', 'Search'),
+            self::TYPE_ADS => Module::t('stat', 'Ads'),
+        ];
+    }
+
+    public function getSource() {
+        $statuses = self::getSourceList();
+        return (isset($this->source)) ? $statuses[$this->source] : '-';
+    }
+
+    public static function getStat($source) {
+        return self::find()->where(['source' => $source])->count('id');
     }
 }

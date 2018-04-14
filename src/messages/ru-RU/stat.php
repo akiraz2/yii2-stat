@@ -17,12 +17,20 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Own Counter' => 'Собственный счетчик',
+    'Stat' => '@@Статистика@@',
+    'Ads' => 'Реклама',
     'Cookie ID' => 'Cookie ID',
     'Created At' => 'Время создания',
+    'Direct' => 'Прямой',
     'ID' => 'ID',
+    'Inner' => 'Внутр',
     'Ip Address' => 'IP-адрес',
     'Referrer' => 'Referrer',
+    'Search' => 'Поиск',
     'Source' => 'Источник перехода',
+    'Unknown' => 'Неизв',
     'Url' => 'Url',
     'User Agent' => 'User Agent',
+    'WebStat Dashboard' => 'Панель статистики',
 ];
