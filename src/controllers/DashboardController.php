@@ -33,7 +33,9 @@ class DashboardController extends Controller
         //Валидация формы входа
         if (isset($count_model['enter'])) {
             $validate = $this->validatePassword($request, $session);
-            if (!$validate) return false;
+            if (!$validate) {
+                return false;
+            }
         }
 
         /*
@@ -85,7 +87,9 @@ class DashboardController extends Controller
             $condition = ["ip" => $count_model['ip']];
             $stat_ip = true;
 
-            if (!$count_model['ip']) $session->setFlash('danger', 'Укажите IP для поиска');
+            if (!$count_model['ip']) {
+                $session->setFlash('danger', 'Укажите IP для поиска');
+            }
         }
 
 
@@ -98,7 +102,9 @@ class DashboardController extends Controller
 
             } else {
 
-                if (!isset($count_model['comment'])) $count_model['comment'] = '';
+                if (!isset($count_model['comment'])) {
+                    $count_model['comment'] = '';
+                }
                 $model->set_black_list($count_model['ip'], $count_model['comment']);
             }
         }

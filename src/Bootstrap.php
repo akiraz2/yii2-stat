@@ -20,7 +20,8 @@ use yii\i18n\PhpMessageSource;
  *
  * @package akiraz2\stat
  */
-class Bootstrap implements BootstrapInterface{
+class Bootstrap implements BootstrapInterface
+{
 
     /**
      * Метод, который вызывается автоматически при каждом запросе
@@ -44,21 +45,21 @@ class Bootstrap implements BootstrapInterface{
          *      'statistics' => 'akiraz2\stat\Module'
          *  ],
          */
-         //$app->setModule('stat', 'akiraz2\stat\Module');
-         if(! ($app instanceof ConsoleApplication)) {
-             $app->get('view')->attachBehavior('ViewBehavior',[
-                 'class' => ViewBehavior::class,
-             ]);
-             $app->attachBehavior('ControllerBehavior',[
-                 'class' => ControllerBehavior::class,
-             ]);
-         }
+        //$app->setModule('stat', 'akiraz2\stat\Module');
+        if (!($app instanceof ConsoleApplication)) {
+            $app->get('view')->attachBehavior('ViewBehavior', [
+                'class' => ViewBehavior::class,
+            ]);
+            $app->attachBehavior('ControllerBehavior', [
+                'class' => ControllerBehavior::class,
+            ]);
+        }
 
         // Add module I18N category.
         if (!isset($app->i18n->translations['akiraz2/stat'])) {
             $app->i18n->translations['akiraz2/stat'] = [
                 'class' => PhpMessageSource::class,
-                'basePath' =>  __DIR__ .'/messages',
+                'basePath' => __DIR__ . '/messages',
                 'forceTranslation' => true,
                 'fileMap' => [
                     'akiraz2/stat' => 'stat.php',

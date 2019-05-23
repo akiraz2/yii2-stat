@@ -9,7 +9,7 @@
 
 namespace akiraz2\stat\traits;
 
-use \akiraz2\stat\Module;
+use akiraz2\stat\Module;
 
 trait ModuleTrait
 {

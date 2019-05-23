@@ -4,10 +4,9 @@ namespace akiraz2\stat\models;
 
 use akiraz2\stat\Module;
 use akiraz2\stat\traits\ModuleTrait;
-use Yii;
 
 /**
- * This is the model class for table "{{%webstat}}".
+ * This is the model class for table "{{%webstat_visitor}}".
  *
  * @property int $id
  * @property string $cookie_id
@@ -37,6 +36,11 @@ class WebVisitor extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return '{{%webstat_visitor}}';
+    }
+
+    public static function getStat($source)
+    {
+        return self::find()->where(['source' => $source])->count('id');
     }
 
     /**
@@ -72,7 +76,14 @@ class WebVisitor extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getSourceList() {
+    public function getSource()
+    {
+        $statuses = self::getSourceList();
+        return (isset($this->source)) ? $statuses[$this->source] : '-';
+    }
+
+    public static function getSourceList()
+    {
         return [
             self::TYPE_UNKNOWN => Module::t('stat', 'Unknown'),
             self::TYPE_INNER => Module::t('stat', 'Inner'),
@@ -80,14 +91,5 @@ class WebVisitor extends \yii\db\ActiveRecord
             self::TYPE_SEARCH => Module::t('stat', 'Search'),
             self::TYPE_ADS => Module::t('stat', 'Ads'),
         ];
-    }
-
-    public function getSource() {
-        $statuses = self::getSourceList();
-        return (isset($this->source)) ? $statuses[$this->source] : '-';
-    }
-
-    public static function getStat($source) {
-        return self::find()->where(['source' => $source])->count('id');
     }
 }

@@ -2,10 +2,9 @@
 
 namespace akiraz2\stat\models;
 
-use Yii;
+use common\models\EmailForm;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\EmailForm;
 
 class WebVisitorSearch extends WebVisitor
 {

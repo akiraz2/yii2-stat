@@ -39,7 +39,7 @@ class CodeBuilder extends BaseObject
 
         return [
             'id' => $module_property['id'],
-            'params' => isset($module_property['params'])?$this->prepareParams($module_property): [],
+            'params' => isset($module_property['params']) ? $this->prepareParams($module_property) : [],
         ];
     }
 

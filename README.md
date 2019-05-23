@@ -1,31 +1,29 @@
 # Yii2 Multi Web Statistic Module [![Packagist Version](https://img.shields.io/packagist/v/akiraz2/yii2-stat.svg?style=flat-square)](https://packagist.org/packages/akiraz2/yii2-stat) [![Total Downloads](https://img.shields.io/packagist/dt/akiraz2/yii2-stat.svg?style=flat-square)](https://packagist.org/packages/akiraz2/yii2-stat) [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
 > **NOTE:** Module is in initial development. Anything may change at any time. 
-На данный момент текущая рабочая версия v0.2 - есть только счетчики яндекса и google и собственный счетчик в DB
+На данный момент текущая рабочая версия v0.3 - есть только счетчики яндекса и google и собственный счетчик в DB
 
-Модуль статистики и аналитики для вашего сайта. Много систем на ваш выбор, подключаются либо в конфиге модуля либо в админке:
+Statistics and Analytics module for your website. Many systems of your choice, connect either in the config module or in the admin panel:
 
 * **Яндекс-Метрика**
 * **Google Analytics**
 * Liveinternet
 * TopMail
-* **Bigmir** *(для украинской аудитории)*
+* Bigmir *(для украинской аудитории)*
 * Alexa
 * Hotlog
 * Rambler
 * Openstat
 * и даже на выбор **собственная** система для отслеживания посетителей по их IP-адресам и cookie.
 
-> **NOTE:** Используются самые свежие версии кода счетчика (yandex-metrika2, gtag.js).
 
-
-Для разработки модуля Yii2 Stat были использованы наработки данных модулей:
+To develop the Yii2 Stat module, the developments of these modules were used:
 * [klisl/yii2-statistics](https://github.com/klisl/yii2-statistics) (inspired)
 * [hiqdev/yii2-yandex-metrika](https://github.com/hiqdev/yii2-yandex-metrika) (code)
 
-Иногда не все посещения сайта фиксируются счетчиками Яндекса или Google. 
-Чтобы посещение точно было засчитано (а это очень важно для отслеживания рекламных источников), 
-используют серверные логи или в нашем случае можно использовать минимально рабочий счетчик на PHP.
+Sometimes not all site visits are recorded by Yandex or Google counters. 
+To visit was accurately counted (and this is very important for tracking advertising sources), 
+use server logs or in our case you can use the minimum working counter in PHP.
 
 
 ## Features
@@ -37,14 +35,14 @@
 * можно посмотреть страну, **город**, какой браузер и расширение, **referer**
 * **источник перехода** (inner, search, direct, ads (from UTM-tags), unknown)
 * **отсеивание поисковых ботов** (11шт)
-* есть возможность добавления IP, которые не нужны в статистике в черный спискок
+* есть возможность добавления IP, которые не нужны в статистике, в черный спискок
 * удобная фильтрация вывода результатов статистики (за день, период, по определенному IP)
 
 
-Какая информация выводится по каждому отдельному посетителю:
-* его уникальный IP адрес с возможностью получения информации о его местонахождении
-* URL просматриваемой страницы и количество переходов
-* время посещения определенной страницы
+What information is displayed for each individual visitor:
+* its unique IP address with the ability to obtain information about its location
+* URL of the page being viewed and number of clicks
+* time to visit a particular page
 
 
   
@@ -100,7 +98,7 @@ Config common modules in common/config/main.php
             'onlyGuestUsers' => true, // true default
             'countBot' => false, // false default
             'appId' => ['app-frontend'], // by default count visits only from Frontend App (in backend app we dont need it)
-            'blackIpList' => [] // ['127.0.0.1'] by default
+            'blackIpList' => [], // ['127.0.0.1'] by default
             
             // размещаем нашу админ панель на backend с проверкой доступа или ролями (здесь используется dektrium/user)
             'controllerMap' => [
@@ -125,7 +123,7 @@ Config common modules in common/config/main.php
 ```
 
 ## Usage
-// переработать
+//
 
 
 Для перехода на страницу статистики
@@ -136,6 +134,13 @@ Config common modules in common/config/main.php
 
 
 ## Development
+
+### TODO
+1. Optimize db usage (for inner db-counter)
+2. Real dashboard, analytics
+3. Remove unnecessary code from previous packages
+4. Add other services (Hotlog, Openstat, etc)
+5. Translate dashboard
 
 Please translate to your language! Edit config `@vendor/akiraz2/yii2-stat/src/messages/config.php`, add your language and run script:
 ```php

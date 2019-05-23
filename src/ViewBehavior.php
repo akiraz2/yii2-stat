@@ -28,8 +28,15 @@ class ViewBehavior extends \yii\base\Behavior
 
     public function onEndBody($event)
     {
+        $module = $this->getModule();
+        $request = Yii::$app->request;
         // зачем нам счетчики в дев режиме- отключаем
-        if (YII_DEBUG || YII_ENV == 'dev' || Yii::$app->request->isAjax) {
+        if (Yii::$app->request->isAjax
+            || (in_array($request->userIP, $module->blackIpList))
+            || !in_array(Yii::$app->id, $module->appId)
+            || YII_DEBUG || YII_ENV == 'dev'
+            || $request->isAjax
+            || ($module->onlyGuestUsers && !Yii::$app->user->isGuest)) {
             return;
         }
 

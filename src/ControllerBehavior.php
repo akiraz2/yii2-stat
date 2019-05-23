@@ -22,6 +22,73 @@ class ControllerBehavior extends Behavior
 {
     use ModuleTrait;
 
+    /**
+     * Проверяет, является ли посетитель роботом поисковой системы из перечня.
+     *
+     * @param string $botname
+     * @return bool|string
+     */
+    public static function isBot1(&$botname = '')
+    {
+        $bots = array(
+            'rambler',
+            'googlebot',
+            'aport',
+            'yahoo',
+            'msnbot',
+            'turtle',
+            'mail.ru',
+            'omsktele',
+            'yetibot',
+            'picsearch',
+            'sape.bot',
+            'sape_context',
+            'gigabot',
+            'snapbot',
+            'alexa.com',
+            'megadownload.net',
+            'askpeter.info',
+            'igde.ru',
+            'ask.com',
+            'qwartabot',
+            'yanga.co.uk',
+            'scoutjet',
+            'similarpages',
+            'oozbot',
+            'shrinktheweb.com',
+            'aboutusbot',
+            'followsite.com',
+            'dataparksearch',
+            'google-sitemaps',
+            'appEngine-google',
+            'feedfetcher-google',
+            'liveinternet.ru',
+            'xml-sitemaps.com',
+            'agama',
+            'metadatalabs.com',
+            'h1.hrn.ru',
+            'googlealert.com',
+            'seo-rus.com',
+            'yaDirectBot',
+            'yandeG',
+            'yandex',
+            'yandexSomething',
+            'Copyscape.com',
+            'AdsBot-Google',
+            'domaintools.com',
+            'Nigma.ru',
+            'bing.com',
+            'dotnetdotcom'
+        );
+        foreach ($bots as $bot) {
+            if (stripos($_SERVER['HTTP_USER_AGENT'], $bot) !== false) {
+                $botname = $bot;
+                return $botname;
+            }
+        }
+        return false;
+    }
+
     public function events()
     {
         return [
@@ -42,12 +109,13 @@ class ControllerBehavior extends Behavior
         if (!$module->ownStat
             || (in_array($request->userIP, $module->blackIpList))
             || !in_array(Yii::$app->id, $module->appId)
-            //|| YII_DEBUG || YII_ENV == 'dev'
+            || YII_DEBUG || YII_ENV == 'dev'
             || $request->isAjax
             || ($module->onlyGuestUsers && !Yii::$app->user->isGuest)
             || !$module->countBot && self::isBot()
-        )
+        ) {
             return;
+        }
 
         $cookies = Yii::$app->request->getCookies();
         $cookie_id_name = $module->ownStatCookieId;
@@ -61,17 +129,15 @@ class ControllerBehavior extends Behavior
         } else {
             $cookie_id = $cookies->get($cookie_id_name);
         }
-
-        $visitor = new WebVisitor();
-        $visitor->ip_address = $request->userIP;
-        $visitor->source = self::identitySource($request);
-        $visitor->cookie_id = $cookie_id->value;
-        $visitor->url = $request->getAbsoluteUrl();
-        $visitor->referrer = $request->getReferrer();
-        $visitor->user_id = !Yii::$app->user->isGuest ? Yii::$app->user->identity->id : null;
-        $visitor->user_agent = Yii::$app->request->userAgent;
-        $visitor->save();
-        //var_dump($visitor->getErrors());
+        Yii::$app->db->createCommand()->insert('{{%webstat_visitor}}', [
+            'ip_address' => $request->userIP,
+            'source' => self::identitySource($request),
+            'cookie_id' => $cookie_id->value,
+            'url' => $request->getAbsoluteUrl(),
+            'referrer' => $request->getReferrer(),
+            'user_id' => !Yii::$app->user->isGuest ? Yii::$app->user->identity->id : null,
+            'user_agent' => Yii::$app->request->userAgent,
+        ])->execute();
     }
 
     /**
@@ -84,32 +150,6 @@ class ControllerBehavior extends Behavior
             Yii::$app->request->userAgent //$_SERVER['HTTP_USER_AGENT']
         );
         return $is_bot;
-    }
-
-    /**
-     * Проверяет, является ли посетитель роботом поисковой системы из перечня.
-     *
-     * @param string $botname
-     * @return bool|string
-     */
-    public static function isBot1(&$botname = ''){
-        $bots = array(
-            'rambler','googlebot','aport','yahoo','msnbot','turtle','mail.ru','omsktele',
-            'yetibot','picsearch','sape.bot','sape_context','gigabot','snapbot','alexa.com',
-            'megadownload.net','askpeter.info','igde.ru','ask.com','qwartabot','yanga.co.uk',
-            'scoutjet','similarpages','oozbot','shrinktheweb.com','aboutusbot','followsite.com',
-            'dataparksearch','google-sitemaps','appEngine-google','feedfetcher-google',
-            'liveinternet.ru','xml-sitemaps.com','agama','metadatalabs.com','h1.hrn.ru',
-            'googlealert.com','seo-rus.com','yaDirectBot','yandeG','yandex',
-            'yandexSomething','Copyscape.com','AdsBot-Google','domaintools.com',
-            'Nigma.ru','bing.com','dotnetdotcom'
-        );
-        foreach($bots as $bot)
-            if(stripos($_SERVER['HTTP_USER_AGENT'], $bot) !== false){
-                $botname = $bot;
-                return $botname;
-            }
-        return false;
     }
 
     /**

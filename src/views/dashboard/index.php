@@ -1,10 +1,4 @@
 <?php
-/**
- * Copyright (c) 2018
- * cms Smetana
- * project: alt-money
- *
- */
 
 use akiraz2\stat\models\WebVisitor;
 use akiraz2\stat\Module;
@@ -25,10 +19,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="content-top">
         <div class="col-md-4">
             <div class="content-top-1">
-                <h3><?= Module::t('stat', 'Own Counter');?></h3>
-                <p><?= Module::t('stat', 'Direct');?>: <?= $counter_direct;?></p>
-                <p><?= Module::t('stat', 'Search');?>: <?= $counter_search;?></p>
-                <p><?= Module::t('stat', 'Ads');?>: <?= $counter_ads;?></p>
+                <h3><?= Module::t('stat', 'Own Counter'); ?></h3>
+                <p><?= Module::t('stat', 'Direct'); ?>: <?= $counter_direct; ?></p>
+                <p><?= Module::t('stat', 'Search'); ?>: <?= $counter_search; ?></p>
+                <p><?= Module::t('stat', 'Ads'); ?>: <?= $counter_ads; ?></p>
             </div>
         </div>
         <div class="col-md-4">
@@ -68,6 +62,4 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="clearfix"></div>
     </div>
-
-
 </div>
