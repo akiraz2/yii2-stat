@@ -53,7 +53,7 @@ class WebVisitor extends \yii\db\ActiveRecord
             [['created_at'], 'safe'],
             [['cookie_id'], 'string', 'max' => 32],
             [['source'], 'integer', 'max' => 4, 'min' => 0],
-            [['ip_address'], 'string', 'max' => 15],
+            [['ip_address'], 'string', 'max' => 45],//15 ip4, 39/45 ipv6
             [['url', 'referrer', 'user_agent'], 'string', 'max' => 255],
             ['user_id', 'integer'],
         ];
