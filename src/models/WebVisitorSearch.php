@@ -38,7 +38,7 @@ class WebVisitorSearch extends WebVisitor
      */
     public function search($params)
     {
-        $query = WebVisitor::find()->addSelect(['*', 'COUNT(cookie_id) as visits'])->groupBy(['cookie_id']);
+        $query = WebVisitor::find();
 
         // add conditions that should always apply here
 
